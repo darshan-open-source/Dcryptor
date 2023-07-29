@@ -58,6 +58,7 @@ void ivchanged2(const QString &);
 void update_progress(int);
 void progress(int);
 void saveclicked();
+void encryptDecryptButtionChanged();
 signals:
 void textready(std::string);
 void progresschanged(int);

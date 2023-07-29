@@ -52,9 +52,11 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     t = new QTextEdit(this);
     t->setPlaceholderText("Enter Text Here");
 
-    dowork = new QPushButton("do",this);
+    dowork = new QPushButton("Encrypt",this);
     pbar = new QProgressBar(this);
+    pbar->setFormat("Nothing");
     pbar->setRange(0,100);
+    pbar->setValue(0);
     pbar->setStyleSheet("text-align:center");
    //
 //  pbar->setFormat("dddd");
@@ -117,6 +119,8 @@ void textwidget::connector()
     connect(key,SIGNAL(textChanged(const QString&)),this,SLOT(keychanged2(const QString&)));
     connect(this,SIGNAL(progresschanged(int)),this,SLOT(update_progress(int)));
     connect(save,SIGNAL(clicked()),this,SLOT(saveclicked()));
+    connect(r1, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
+    connect(r2, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
 
 }
 
@@ -421,4 +425,15 @@ void textwidget::saveclicked(){
             fd->saveFileContent(b);
         }
 
+}
+
+void textwidget::encryptDecryptButtionChanged()
+{
+
+    if (r1->isChecked())
+    {
+        dowork->setText("Encrypt");
+
+    }
+    else dowork->setText("Decrypt");
 }
