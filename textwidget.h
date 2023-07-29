@@ -43,7 +43,9 @@ public:
    int temp=0;
    QLabel *keylen,*ivlen;
 QFrame *frame;
+void addAllAlgorithms();
 
+void addBitsAndModes(QString s);
 void connector();
 void createthread();
 void do_ui(char*,int);

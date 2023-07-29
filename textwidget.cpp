@@ -1,4 +1,5 @@
 #include "textwidget.h"
+#include<Algorithms_list.h>
 
 #include"base64.h"
 #include"common.h"
@@ -24,13 +25,15 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     label5 = new QLabel("Eigen Vector Iv ",this);
 
     algorithm = new QComboBox(this);
+    addAllAlgorithms();
+    
     cmode = new QComboBox(this);
     bitcombobox = new QComboBox(this);
 
 
-    algorithm->addItems(algolist2);
-    cmode->addItems(aesmode);
-    bitcombobox->addItems(bits);
+    //algorithm->addItems(algolist2);
+    //cmode->addItems(aesmode);
+    //bitcombobox->addItems(bits);
 
 
     key = new QLineEdit(this);
@@ -109,6 +112,31 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     connector();
 }
 
+void textwidget::addAllAlgorithms()
+{
+
+    for (std::map<std::string, algorithm_data>::iterator i = all_algorithms.begin(); i != all_algorithms.end(); i++)
+    {
+        algorithm->addItem(QString(i->first.c_str()));
+    }
+}
+
+void textwidget::addBitsAndModes(QString s)
+{
+    algorithm_data a = all_algorithms[s.toStdString()];
+    for (int i = 0; i < a["bits"].size(); i++) {
+        // add bits
+        bitcombobox->addItem(QString(a["bits"][i].c_str()));
+    }
+
+
+    for (int i = 0; i < a["modes"].size(); i++) {
+        // add modes
+        cmode->addItem(QString(a["modes"][i].c_str()));
+
+    }
+}
+
 void textwidget::connector()
 {
     connect(algorithm,SIGNAL(currentIndexChanged(int)),this,SLOT(algochanged(int)));
@@ -122,6 +150,8 @@ void textwidget::connector()
     connect(r1, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
     connect(r2, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
 
+    // for inialize bit and modes in ui
+    algorithm->currentIndexChanged(algorithm->currentIndex());
 }
 
 void textwidget::createthread()
@@ -190,97 +220,11 @@ void textwidget::threadcall(textwidget* t,const EVP_CIPHER *C,QString text,QStri
 
     }
 }
-void textwidget::algochanged(int i )
+void textwidget::algochanged(int i)
 {
-    switch (i) {
-    case 0:
-        cmode->clear();
-        cmode->addItems(aesmode);
-        bitcombobox->setDisabled(false);
-        bitcombobox->clear();
-        bitcombobox->addItems(bits);
-        break;
-    case 1:
-        cmode->clear();
-        cmode->addItems(ariamode);
-        bitcombobox->setDisabled(false);
-        bitcombobox->clear();
-        bitcombobox->addItems(bits);
-        break;
-    case 2:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-
-        break;
-    case 3:
-        cmode->clear();
-        cmode->addItems(cameliamode);
-        bitcombobox->clear();
-        bitcombobox->setDisabled(false);
-        bitcombobox->addItems(bits);
-        break;
-    case 4:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 5:
-        cmode->clear();
-        cmode->addItems(desmode);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 6:
-        //    triple des not implemented
-        //        cmode->clear();
-        //        cmode->addItems(aria);
-        //        bitcombobox->clear();
-        //        bitcombobox->addItems(bits);
-        break;
-    case 7:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 8:
-        cmode->clear();
-        cmode->addItems(rc2);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-
-    case 9:
-        cmode->clear();
-        cmode->addItems(rc4);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 10:
-        cmode->clear();
-        cmode->addItems(rc5);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 11:
-        cmode->clear();
-        cmode->addItems(sm4);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-
-    }
+    bitcombobox->clear();
+    cmode->clear();
+    addBitsAndModes(algorithm->currentText());
 }
 
 void textwidget::modechanged(int i)
