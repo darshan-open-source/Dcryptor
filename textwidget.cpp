@@ -3,6 +3,7 @@
 
 #include"base64.h"
 #include"common.h"
+#include<algo_widget.h>
 #include<openssl/provider.h>
 textwidget::textwidget(QWidget *parent) : QWidget(parent)
 {
@@ -10,48 +11,8 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
   OSSL_PROVIDER_load(NULL, "default");
 
     main_layout = new QVBoxLayout();
-    first_layout = new QHBoxLayout();
-    second_layout = new QHBoxLayout();
-    third_layout = new QHBoxLayout();
-    forth_layout = new QHBoxLayout();
-    fifth_layout = new QHBoxLayout();
-    sixth_layout = new QHBoxLayout();
 
 
-    label = new  QLabel("Select Algorithm   ",this);
-    label2 = new QLabel("Select Cipher Mode",this);
-    label3 = new QLabel("Select Bit          ",this);
-    label4 = new QLabel("Key                   ",this);
-    label5 = new QLabel("Eigen Vector Iv ",this);
-
-    algorithm = new QComboBox(this);
-    addAllAlgorithms();
-    
-    cmode = new QComboBox(this);
-    bitcombobox = new QComboBox(this);
-
-
-    //algorithm->addItems(algolist2);
-    //cmode->addItems(aesmode);
-    //bitcombobox->addItems(bits);
-
-
-    key = new QLineEdit(this);
-    iv = new QLineEdit(this);
-
-    keylen = new QLabel("0",this);
-    ivlen = new QLabel("0",this);
-
-
-    key->setPlaceholderText("Enter key here");
-    iv->setPlaceholderText("Enter Eigon vector here");
-
-
-    frame = new QFrame(this);
-    r1 = new QRadioButton("Encrypt");
-    r2 = new QRadioButton("Decrypt");
-    frame->setLayout(sixth_layout);
-    r1->setChecked(true);
     t = new QTextEdit(this);
     t->setPlaceholderText("Enter Text Here");
 
@@ -61,15 +22,13 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     pbar->setRange(0,100);
     pbar->setValue(0);
     pbar->setStyleSheet("text-align:center");
-   //
-//  pbar->setFormat("dddd");
+
     out = new QTextBrowser(this);
     gb = new QGroupBox("save to file",this);
     last_layout= new QHBoxLayout();
 
     bin = new QRadioButton("binary",gb);
     base64encoded = new QRadioButton("Base64",gb);
-    //bin->setChecked(true);
 
     save = new QPushButton("save",this);
 
@@ -78,29 +37,9 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     last_layout->addWidget(save);
     gb->setLayout(last_layout);
 
-    first_layout->addWidget(label);
-    first_layout->addWidget(algorithm);
-    second_layout->addWidget(label2);
-    second_layout->addWidget(cmode);
-    third_layout->addWidget(label3);
-    third_layout->addWidget(bitcombobox);
-    forth_layout->addWidget(label4);
-    forth_layout->addWidget(key);
-    forth_layout->addWidget(keylen);
-    fifth_layout->addWidget(label5);
-    fifth_layout->addWidget(iv);
-    fifth_layout->addWidget(ivlen);
-    sixth_layout->addWidget(r1);
-    sixth_layout->addWidget(r2);
+    algo_widgetx = new algo_widget(this);
 
-
-
-    main_layout->addLayout(first_layout);
-    main_layout->addLayout(second_layout);
-    main_layout->addLayout(third_layout);
-    main_layout->addLayout(forth_layout);
-    main_layout->addLayout(fifth_layout);
-    main_layout->addWidget(frame);
+    main_layout->addWidget(algo_widgetx);
     main_layout->addWidget(t);
     main_layout->addWidget(dowork);
     main_layout->addWidget(pbar);
@@ -109,7 +48,7 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
     main_layout->addWidget(gb);
 
     setLayout(main_layout);
-    connector();
+   connector();
 }
 
 void textwidget::addAllAlgorithms()
@@ -139,19 +78,12 @@ void textwidget::addBitsAndModes(QString s)
 
 void textwidget::connector()
 {
-    connect(algorithm,SIGNAL(currentIndexChanged(int)),this,SLOT(algochanged(int)));
-    connect(cmode,SIGNAL(currentIndexChanged(int)),this,SLOT(modechanged(int)));
+    
     connect(dowork,SIGNAL(clicked()),this,SLOT(do_pressed()));
     connect(this,SIGNAL(textready(std::string)),this,SLOT(text_is_ready(std::string)));
-    connect(iv,SIGNAL(textChanged(const QString&)),this,SLOT(ivchanged2(const QString&)));
-    connect(key,SIGNAL(textChanged(const QString&)),this,SLOT(keychanged2(const QString&)));
     connect(this,SIGNAL(progresschanged(int)),this,SLOT(update_progress(int)));
     connect(save,SIGNAL(clicked()),this,SLOT(saveclicked()));
-    connect(r1, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
-    connect(r2, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
-
-    // for inialize bit and modes in ui
-    algorithm->currentIndexChanged(algorithm->currentIndex());
+   
 }
 
 void textwidget::createthread()
@@ -243,17 +175,21 @@ void textwidget::modechanged(int i)
 
 int textwidget::do_pressed()
 {
-   if(iv->isEnabled()){
-    if(  cmode->currentText() == "gcm" || cmode->currentText() == "ccm"){
-        if(iv->text().length()!=8){
+   if(algo_widgetx->isIVEnabled()){
+       QString cmodetext = algo_widgetx->getMode();
+       QString key_text = algo_widgetx->getKey();
+       QString iv_text = algo_widgetx->getIv();
 
-            iv->setStyleSheet("border:1px solid red");
+    if(  cmodetext == "gcm" || cmodetext == "ccm"){
+        if(iv_text.length()!=8){
+
+            //iv->setStyleSheet("border:1px solid red");
 
             return 0;
         }
-    }else if(cmode->currentText() == "cbc" || cmode->currentText() == "cfb"|| cmode->currentText() == "ctr"||cmode->currentText() == "ofb"||cmode->currentText() == "cfb8"||cmode->currentText() == "cfb1"||cmode->currentText() == "xts"){
-        if(iv->text().length()!=16){
-            iv->setStyleSheet("border:1px solid red");
+    }else if(cmodetext == "cbc" || cmodetext == "cfb"|| cmodetext == "ctr"||cmodetext == "ofb"||cmodetext == "cfb8"||cmodetext == "cfb1"||cmodetext == "xts"){
+        if(iv_text.length()!=16){
+            //iv->setStyleSheet("border:1px solid red");
 
             return 0;
         }

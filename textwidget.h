@@ -19,8 +19,7 @@
 #include<openssl/evp.h>
 #include<thread>
 #include<qtoolbutton.h>
-//#include<Symmetric_cryptography.h>
-//#include<Base64.h>
+#include"algo_widget.h"
 
 class textwidget : public QWidget
 {
@@ -38,19 +37,21 @@ public:
     QTextBrowser *out;
     QFileDialog *diag;
     QProgressBar *pbar;
+    algo_widget* algo_widgetx;
 
    QGroupBox *gb;
    int temp=0;
    QLabel *keylen,*ivlen;
 QFrame *frame;
+void addBitsAndModes(QString);
 void addAllAlgorithms();
 
-void addBitsAndModes(QString s);
 void connector();
 void createthread();
 void do_ui(char*,int);
 static void threadcall(textwidget*,const EVP_CIPHER *C, QString text, QString key, QString iv, bool encrypt);
 public slots:
+void encryptDecryptButtionChanged();
 void algochanged(int i);
 void modechanged(int i);
 int do_pressed();
@@ -60,7 +61,6 @@ void ivchanged2(const QString &);
 void update_progress(int);
 void progress(int);
 void saveclicked();
-void encryptDecryptButtionChanged();
 signals:
 void textready(std::string);
 void progresschanged(int);

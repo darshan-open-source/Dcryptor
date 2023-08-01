@@ -195,6 +195,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="About_Decryptor.cpp" />
+    <ClCompile Include="algo_widget.cpp" />
     <ClCompile Include="filewidget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
@@ -203,6 +204,7 @@
   <ItemGroup>
     <QtMoc Include="About_Decryptor.h" />
     <ClInclude Include="Algorithms_list.h" />
+    <QtMoc Include="algo_widget.h" />
     <ClInclude Include="base64.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="common2.h" />
@@ -211,6 +213,7 @@
     </QtMoc>
     <QtMoc Include="mainwindow.h">
     </QtMoc>
+    <ClInclude Include="styles.h" />
     <ClInclude Include="textdep.h" />
     <QtMoc Include="textwidget.h">
     </QtMoc>

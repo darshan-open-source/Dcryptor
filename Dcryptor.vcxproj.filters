@@ -52,6 +52,9 @@
     <ClCompile Include="About_Decryptor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="algo_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base64.h">
@@ -79,6 +82,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="Algorithms_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="styles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -109,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="About_Decryptor.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="algo_widget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
