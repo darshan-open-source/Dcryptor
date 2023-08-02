@@ -5,6 +5,7 @@
 #include"common.h"
 #include<algo_widget.h>
 #include<openssl/provider.h>
+#include<qmessagebox.h>
 textwidget::textwidget(QWidget *parent) : QWidget(parent)
 {
   OSSL_PROVIDER_load(NULL, "legacy");
@@ -86,32 +87,10 @@ void textwidget::connector()
    
 }
 
-void textwidget::createthread()
+void textwidget::createthread(const EVP_CIPHER* xbp)
 {
     dowork->setDisabled(true);
-    QString AL = algorithm->currentText();
-    QString mode = cmode->currentText();
-    const EVP_CIPHER *xbp;
-    QString s;
-    if(bitcombobox->isEnabled())
-    {
-        s.append(AL);
-        s.append("-");
-        s.append(bitcombobox->currentText());
-        s.append("-");
-        s.append(mode);
-        xbp= EVP_get_cipherbyname(s.toStdString().c_str());
-    }
-    else{
-        if(strcmp(algorithm->currentText().toStdString().c_str(),"Blowfish")==0)
-            s.append("bf");
-
-        else s.append(AL);
-        s.append("-");
-        s.append(mode);
-        qInfo()<<s.toStdString().c_str();
-        xbp= EVP_get_cipherbyname(s.toStdString().c_str());
-    }
+   
     if(xbp != 0){
 
         std::thread tmxx(threadcall,this,xbp,t->toPlainText(),key->text(),iv->text(),(int)r1->isChecked());
@@ -152,90 +131,69 @@ void textwidget::threadcall(textwidget* t,const EVP_CIPHER *C,QString text,QStri
 
     }
 }
-void textwidget::algochanged(int i)
-{
-    bitcombobox->clear();
-    cmode->clear();
-    addBitsAndModes(algorithm->currentText());
-}
 
-void textwidget::modechanged(int i)
-{
-    if(cmode->currentText()=="ecb"){iv->setDisabled(true);
-        iv->clear();
-        ivlen->setText("0");
-
-    }
-    else{ iv->setEnabled(true);
-
-//        ivlen->setText(QString::fromStdString(std::to_string(ivlen->text().lengt));
-
-    }
-}
 
 int textwidget::do_pressed()
 {
-   if(algo_widgetx->isIVEnabled()){
-       QString cmodetext = algo_widgetx->getMode();
-       QString key_text = algo_widgetx->getKey();
-       QString iv_text = algo_widgetx->getIv();
+    algo_widgetx->highlightIV(false);
+    algo_widgetx->highlightkey(false);
 
-    if(  cmodetext == "gcm" || cmodetext == "ccm"){
-        if(iv_text.length()!=8){
 
-            //iv->setStyleSheet("border:1px solid red");
+    
+    QString s;
+   const  EVP_CIPHER* xbp;
+    if (!algo_widgetx->isBitCombooxDisabled())
+    {
+        s.append(algo_widgetx->getAlgorithm());
+        s.append("-");
+        s.append(algo_widgetx->getBit());
+        s.append("-");
+        s.append(algo_widgetx->getMode());
 
-            return 0;
-        }
-    }else if(cmodetext == "cbc" || cmodetext == "cfb"|| cmodetext == "ctr"||cmodetext == "ofb"||cmodetext == "cfb8"||cmodetext == "cfb1"||cmodetext == "xts"){
-        if(iv_text.length()!=16){
-            //iv->setStyleSheet("border:1px solid red");
+       xbp = (const EVP_CIPHER*) EVP_get_cipherbyname(s.toStdString().c_str());
 
-            return 0;
-        }
     }
-   }
-    iv->setStyleSheet("");
+    else {
+        if (strcmp(algo_widgetx->getAlgorithm().toStdString().c_str(), "Blowfish") == 0)
+            s.append("bf");
 
-    if(key->text().length()==0){
-        key->setStyleSheet("border:1px solid red");
-    }
-    else{
-        key->setStyleSheet("");
-    }
-    if(t->toPlainText().length()==0){
-        t->setStyleSheet("border:1px solid red");
-    }
-    else{
-        t->setStyleSheet("");
+        else s.append(algo_widgetx->getAlgorithm());
+        s.append("-");
+        s.append(algo_widgetx->getMode());
+    
+        qInfo() << s.toStdString().c_str();
+        xbp = EVP_get_cipherbyname(s.toStdString().c_str());
     }
 
-    if(bitcombobox->isEnabled()){
 
-        int x = bitcombobox->currentText().toInt();
-        if(x==128){
-            if(key->text().length() != 16) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
-        else if(x==192){
-            if(key->text().length() != 24) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
-        else if(x==256){
-            if(key->text().length() != 32) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
+    int key_len = EVP_CIPHER_get_key_length(xbp);
+    int iv_len = EVP_CIPHER_get_iv_length(xbp);
+
+    if (algo_widgetx->getIv().length() != iv_len)
+    {
+        algo_widgetx->highlightIV(true);
+
+
+        return 0;
+    }
+    if (algo_widgetx->getKey().length() != key_len)
+    {
+        algo_widgetx->highlightkey(true);
+        return 0;
     }
 
-    qInfo() <<"j" <<key->text().length();
-    if(key->text().length() !=0 && t->toPlainText().length() !=0 && iv->isEnabled() && iv->text().length() !=0 ){
 
-        createthread();
-    }
-    if(key->text().length() !=0 && t->toPlainText().length() !=0 && !iv->isEnabled() ){
+    return 0;
+   
 
-        createthread();
+
+
+    
+    if(t->toPlainText().length() !=0 ){
+
+        createthread(xbp);
     }
+
 
 }
 

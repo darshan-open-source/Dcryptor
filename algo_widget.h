@@ -33,6 +33,10 @@ public:
     QString getIv();
     void setIvDisabled(bool);
     bool isIVEnabled();
+    bool isBitCombooxDisabled();
+
+    void highlightIV(bool);
+    void highlightkey(bool);
   
     
 

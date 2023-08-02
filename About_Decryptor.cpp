@@ -39,6 +39,7 @@ About_Decryptor::About_Decryptor(QWidget* parent) : QWidget(parent)
 
         "</p>"
     );
+    descriptionBrowser->setStyleSheet("background:transparent;border:none");
     mainLayout->addWidget(descriptionBrowser);
 
     //mainLayout->addStretch();

@@ -110,6 +110,33 @@ bool algo_widget::isIVEnabled()
     return iv->isEnabled();
 }
 
+bool algo_widget::isBitCombooxDisabled()
+{
+    return !bitcombobox->isEnabled();
+}
+
+void algo_widget::highlightIV(bool val)
+{
+    if (val)
+    {
+        iv->setStyleSheet("border:1px solid red");
+
+    }
+    else iv->setStyleSheet("");
+
+
+}
+
+void algo_widget::highlightkey(bool val)
+{
+    if (val)
+    {
+        key->setStyleSheet("border:1px solid red");
+
+    }
+    else key->setStyleSheet("");
+}
+
 
 void algo_widget::addAllAlgorithms()
 {
@@ -128,7 +155,11 @@ void algo_widget::addBitsAndModes(QString s)
         bitcombobox->addItem(QString(a["bits"][i].c_str()));
     }
 
-
+    if (a["bits"][0] == "unusable")
+    {
+        bitcombobox->setEnabled(false);
+    }
+    else bitcombobox->setEnabled(true);
     for (int i = 0; i < a["modes"].size(); i++) {
         // add modes
         cmode->addItem(QString(a["modes"][i].c_str()));

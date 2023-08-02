@@ -47,13 +47,12 @@ void addBitsAndModes(QString);
 void addAllAlgorithms();
 
 void connector();
-void createthread();
+void createthread(const EVP_CIPHER*);
 void do_ui(char*,int);
 static void threadcall(textwidget*,const EVP_CIPHER *C, QString text, QString key, QString iv, bool encrypt);
 public slots:
 void encryptDecryptButtionChanged();
-void algochanged(int i);
-void modechanged(int i);
+
 int do_pressed();
 void text_is_ready(std::string);
 void keychanged2(const QString &);
