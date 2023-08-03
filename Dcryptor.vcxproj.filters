@@ -66,25 +66,16 @@
     <ClInclude Include="common2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="filedep.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <QtMoc Include="filewidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClInclude Include="textdep.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <QtMoc Include="textwidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="Algorithms_list.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="styles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

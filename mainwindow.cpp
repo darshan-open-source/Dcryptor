@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include"textdep.h"
 #include"textwidget.h"
 #include"filewidget.h"
 #include"About_Decryptor.h"

@@ -52,30 +52,6 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
    connector();
 }
 
-void textwidget::addAllAlgorithms()
-{
-
-    for (std::map<std::string, algorithm_data>::iterator i = all_algorithms.begin(); i != all_algorithms.end(); i++)
-    {
-        algorithm->addItem(QString(i->first.c_str()));
-    }
-}
-
-void textwidget::addBitsAndModes(QString s)
-{
-    algorithm_data a = all_algorithms[s.toStdString()];
-    for (int i = 0; i < a["bits"].size(); i++) {
-        // add bits
-        bitcombobox->addItem(QString(a["bits"][i].c_str()));
-    }
-
-
-    for (int i = 0; i < a["modes"].size(); i++) {
-        // add modes
-        cmode->addItem(QString(a["modes"][i].c_str()));
-
-    }
-}
 
 void textwidget::connector()
 {
@@ -214,18 +190,6 @@ else {
     dowork->setEnabled(true);
 }
 
-void textwidget::keychanged2(const QString & text)
-{
-    keylen->setText(QString::fromStdString(std::to_string(text.length())));
-}
-
-void textwidget::ivchanged2(const QString & text)
-{
-    if(iv->isEnabled()){
-
-        ivlen->setText(QString::fromStdString(std::to_string(text.length())));
-    }
-}
 
 void textwidget::update_progress(int x)
 {
