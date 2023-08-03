@@ -51,7 +51,7 @@ void createthread(const EVP_CIPHER*);
 void do_ui(char*,int);
 static void threadcall(textwidget*,const EVP_CIPHER *C, QString text, QString key, QString iv, bool encrypt);
 public slots:
-void encryptDecryptButtionChanged();
+void encryptDecryptButtionChanged(bool);
 
 int do_pressed();
 void text_is_ready(std::string);

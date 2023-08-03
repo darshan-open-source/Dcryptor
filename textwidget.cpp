@@ -84,7 +84,7 @@ void textwidget::connector()
     connect(this,SIGNAL(textready(std::string)),this,SLOT(text_is_ready(std::string)));
     connect(this,SIGNAL(progresschanged(int)),this,SLOT(update_progress(int)));
     connect(save,SIGNAL(clicked()),this,SLOT(saveclicked()));
-   
+    connect(algo_widgetx, SIGNAL(encryptDecryptRadioButtonChanged(bool)), this, SLOT(encryptDecryptButtionChanged(bool)));
 }
 
 void textwidget::createthread(const EVP_CIPHER* xbp)
@@ -93,7 +93,7 @@ void textwidget::createthread(const EVP_CIPHER* xbp)
    
     if(xbp != 0){
 
-        std::thread tmxx(threadcall,this,xbp,t->toPlainText(),key->text(),iv->text(),(int)r1->isChecked());
+        std::thread tmxx(threadcall,this,xbp,t->toPlainText(),algo_widgetx->getKey(), algo_widgetx->getIv(), (int)algo_widgetx->isEncryptedChecked());
         tmxx.detach();
     }
 }
@@ -130,6 +130,7 @@ void textwidget::threadcall(textwidget* t,const EVP_CIPHER *C,QString text,QStri
 
 
     }
+    EVP_CIPHER_free((EVP_CIPHER*)C);
 }
 
 
@@ -169,6 +170,11 @@ int textwidget::do_pressed()
     int key_len = EVP_CIPHER_get_key_length(xbp);
     int iv_len = EVP_CIPHER_get_iv_length(xbp);
 
+    if (algo_widgetx->getKey().length() != key_len)
+    {
+        algo_widgetx->highlightkey(true);
+        return 0;
+    }
     if (algo_widgetx->getIv().length() != iv_len)
     {
         algo_widgetx->highlightIV(true);
@@ -176,16 +182,12 @@ int textwidget::do_pressed()
 
         return 0;
     }
-    if (algo_widgetx->getKey().length() != key_len)
-    {
-        algo_widgetx->highlightkey(true);
-        return 0;
-    }
+  
 
 
-    return 0;
+  
    
-
+    
 
 
     
@@ -207,15 +209,7 @@ if(sx.length()!=0){
 else {
     out->setText("operation not does not work");
 }
-//    if(strlen(x)==0 && temp==0){
-//        do_pressed();
-//        temp++;
-//    }
-//    else if(strlen(x)==0 && temp!=0){
-//        out->setText("Data can't be decrypted");
-//    }
-//    else{
-//        out->setText(s);}
+
 
     dowork->setEnabled(true);
 }
@@ -265,10 +259,10 @@ void textwidget::saveclicked(){
 
 }
 
-void textwidget::encryptDecryptButtionChanged()
+void textwidget::encryptDecryptButtionChanged(bool val)
 {
 
-    if (r1->isChecked())
+    if (val)
     {
         dowork->setText("Encrypt");
 

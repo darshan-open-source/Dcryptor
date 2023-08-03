@@ -31,6 +31,7 @@ public:
     QString getMode();
     QString getKey();
     QString getIv();
+    bool isEncryptedChecked();
     void setIvDisabled(bool);
     bool isIVEnabled();
     bool isBitCombooxDisabled();
@@ -59,6 +60,9 @@ public slots:
     void modechanged(int i);
     void keychanged2(const QString&);
     void ivchanged2(const QString&);
-    
+    void encryptDecryptButtionChanged();
+  
+signals:
+    void encryptDecryptRadioButtonChanged(bool);
 };
 

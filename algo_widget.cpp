@@ -100,6 +100,11 @@ QString algo_widget::getIv()
     return  iv->text();
 }
 
+bool algo_widget::isEncryptedChecked()
+{
+    return r1->isChecked();
+}
+
 void algo_widget::setIvDisabled(bool value)
 {
     iv->setDisabled(value);
@@ -194,6 +199,13 @@ void algo_widget::ivchanged2(const QString& text)
 
         ivlen->setText(QString::fromStdString(std::to_string(text.length())));
     }
+}
+
+void algo_widget::encryptDecryptButtionChanged()
+{
+    if (r1->isChecked())
+        emit encryptDecryptRadioButtonChanged(true);
+    else emit encryptDecryptRadioButtonChanged(false);
 }
 
 void algo_widget::algochanged(int i)
