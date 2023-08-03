@@ -55,15 +55,15 @@
     <ClCompile Include="algo_widget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="base64.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CryptoUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base64.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <QtMoc Include="filewidget.h">
@@ -76,6 +76,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClInclude Include="Algorithms_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptoUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

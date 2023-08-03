@@ -18,7 +18,9 @@
 #include<QCheckBox>
 #include<openssl/evp.h>
 #include<thread>
+
 #include<qmessagebox.h>
+#include<algo_widget.h>
 #include<sys/stat.h>
 #include<qtoolbutton.h>
 class filewidget : public QWidget
@@ -41,22 +43,21 @@ public:
     QCheckBox *c;
     QGroupBox *gb;
     int temp=0;
+    algo_widget* algo_widgetx;
     QToolButton *savebtn;
     QLabel *keylen,*ivlen;
     QFrame *frame;
     void connector();
-    void createthread();
+    void createthread(const  EVP_CIPHER*);
     void do_ui(int);
     static void threadcall(const EVP_CIPHER *C, QString plainfile,QString encryptfile, QString key, QString iv, bool encrypt,filewidget*);
     static void encryptFolder(const EVP_CIPHER *C, QString plainfile,QString encryptfile, QString key, QString iv, bool encrypt,filewidget*);
 
 public slots:
-    void algochanged(int i);
-    void modechanged(int i);
+    
     int do_pressed();
     void fileready(int);
-    void keychanged2(const QString &);
-    void ivchanged2(const QString &);
+   
     void update_progress(int,int);
     void progress(int,int);
     void openclicked();

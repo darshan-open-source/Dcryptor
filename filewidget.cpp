@@ -1,22 +1,14 @@
 #include "filewidget.h"
-#include"common2.h"
+#include"CryptoUtil.h"
 filewidget::filewidget(QWidget *parent) : QWidget(parent)
 {
 
     main_layout = new QVBoxLayout();
-    first_layout = new QHBoxLayout();
-    second_layout = new QHBoxLayout();
-    third_layout = new QHBoxLayout();
-    forth_layout = new QHBoxLayout();
-    fifth_layout = new QHBoxLayout();
-    sixth_layout = new QHBoxLayout();
+   
     layout = new QHBoxLayout();
 
-    label = new  QLabel("Select Algorithm   ",this);
-    label2 = new QLabel("Select Cipher Mode",this);
-    label3 = new QLabel("Select Bit          ",this);
-    label4 = new QLabel("Key                      ",this);
-    label5 = new QLabel("Eigen Vector Iv",this);
+    algo_widgetx = new algo_widget(this);
+
     selectfile = new QLabel("Select File ");
     save_file_label = new QLabel("save file to",this);
     tosave = new QLineEdit(this);
@@ -25,32 +17,9 @@ filewidget::filewidget(QWidget *parent) : QWidget(parent)
     savebtn = new QToolButton(this);
     savebtn->setIcon(QIcon(":/img/save.png"));
 
-    algorithm = new QComboBox(this);
-    cmode = new QComboBox(this);
-    bitcombobox = new QComboBox(this);
+   
 
 
-    algorithm->addItems(algolist23);
-    cmode->addItems(aesmode3);
-    bitcombobox->addItems(bits3);
-
-
-    key = new QLineEdit(this);
-    iv = new QLineEdit(this);
-
-    keylen = new QLabel("0",this);
-    ivlen = new QLabel("0",this);
-
-
-    key->setPlaceholderText("Enter key here");
-    iv->setPlaceholderText("Enter Eigon vector here");
-
-
-    frame = new QFrame(this);
-    r1 = new QRadioButton("Encrypt");
-    r2 = new QRadioButton("Decrypt");
-    frame->setLayout(sixth_layout);
-    r1->setChecked(true);
 
     QFrame *abd = new QFrame(this);
     file = new QRadioButton("File",this);
@@ -61,10 +30,11 @@ filewidget::filewidget(QWidget *parent) : QWidget(parent)
     file_folder->addWidget(file);
     file_folder->addWidget(folder);
 
-    dowork = new QPushButton("do",this);
+    dowork = new QPushButton("Encrypt",this);
     pbar = new QProgressBar(this);
     pbar->setRange(0,100);
-  //  pbar->setValue(0);
+    pbar->setValue(0);
+    pbar->setFormat("Nothing");
     pbar->setStyleSheet("text-align:center");
 
 
@@ -80,31 +50,11 @@ filewidget::filewidget(QWidget *parent) : QWidget(parent)
     toopen->setPlaceholderText("open file");
 
 
-    first_layout->addWidget(label);
-    first_layout->addWidget(algorithm);
-    second_layout->addWidget(label2);
-    second_layout->addWidget(cmode);
-    third_layout->addWidget(label3);
-    third_layout->addWidget(bitcombobox);
-    forth_layout->addWidget(label4);
-    forth_layout->addWidget(key);
-    forth_layout->addWidget(keylen);
-    fifth_layout->addWidget(label5);
-    fifth_layout->addWidget(iv);
-    fifth_layout->addWidget(ivlen);
-    sixth_layout->addWidget(r1);
-    sixth_layout->addWidget(r2);
-
     layout->addWidget(selectfile);
     layout->addWidget(toopen);
     layout->addWidget(select);
 
-    main_layout->addLayout(first_layout);
-    main_layout->addLayout(second_layout);
-    main_layout->addLayout(third_layout);
-    main_layout->addLayout(forth_layout);
-    main_layout->addLayout(fifth_layout);
-    main_layout->addWidget(frame);
+    main_layout->addWidget(algo_widgetx);
     main_layout->addWidget(abd);
     main_layout->addLayout(layout);
     main_layout->addLayout(last_layout);
@@ -115,111 +65,7 @@ filewidget::filewidget(QWidget *parent) : QWidget(parent)
     setLayout(main_layout);
     connector();
 }
-void filewidget::algochanged(int i )
-{
-    switch (i) {
-    case 0:
-        cmode->clear();
-        cmode->addItems(aesmode3);
-        bitcombobox->setDisabled(false);
-        bitcombobox->clear();
-        bitcombobox->addItems(bits3);
-        break;
-    case 1:
-        cmode->clear();
-        cmode->addItems(ariamode3);
-        bitcombobox->setDisabled(false);
-        bitcombobox->clear();
-        bitcombobox->addItems(bits3);
-        break;
-    case 2:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea3);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
 
-        break;
-    case 3:
-        cmode->clear();
-        cmode->addItems(cameliamode3);
-        bitcombobox->clear();
-        bitcombobox->setDisabled(false);
-        bitcombobox->addItems(bits3);
-        break;
-    case 4:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea3);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 5:
-        cmode->clear();
-        cmode->addItems(desmode3);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 6:
-        //    triple des not implemented
-        //        cmode->clear();
-        //        cmode->addItems(aria);
-        //        bitcombobox->clear();
-        //        bitcombobox->addItems(bits);
-        break;
-    case 7:
-        cmode->clear();
-        cmode->addItems(bfmode_cast5_idea3);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 8:
-        cmode->clear();
-        cmode->addItems(rc23);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-
-    case 9:
-        cmode->clear();
-        cmode->addItems(rc43);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 10:
-        cmode->clear();
-        cmode->addItems(rc53);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-    case 11:
-        cmode->clear();
-        cmode->addItems(sm43);
-        bitcombobox->clear();
-        bitcombobox->addItem("unusable");
-        bitcombobox->setDisabled(true);
-        break;
-
-    }
-}
-void filewidget::modechanged(int i)
-{
-    if(cmode->currentText()=="ecb"){iv->setDisabled(true);
-        iv->clear();
-        ivlen->setText("0");
-
-    }
-    else{ iv->setEnabled(true);
-
-        //        ivlen->setText(QString::fromStdString(std::to_string(ivlen->text().lengt));
-
-    }
-}
 
 void filewidget::openclicked()
 {
@@ -252,69 +98,79 @@ void filewidget::connector()
 {
     connect(select,SIGNAL(clicked()),this,SLOT(openclicked()));
     connect(savebtn,SIGNAL(clicked()),this,SLOT(saveclicked()));
-    connect(algorithm,SIGNAL(currentIndexChanged(int)),this,SLOT(algochanged(int)));
-    connect(cmode,SIGNAL(currentIndexChanged(int)),this,SLOT(modechanged(int)));
+   
     connect(dowork,SIGNAL(clicked()),this,SLOT(do_pressed()));
     connect(this,SIGNAL(ready(int)),this,SLOT(fileready(int)));
-    connect(iv,SIGNAL(textChanged(const QString&)),this,SLOT(ivchanged2(const QString&)));
-    connect(key,SIGNAL(textChanged(const QString&)),this,SLOT(keychanged2(const QString&)));
     connect(this,SIGNAL(progresschanged(int,int)),this,SLOT(update_progress(int,int)));
 
 }
 int filewidget::do_pressed()
 {
+    algo_widgetx->highlightIV(false);
+    algo_widgetx->highlightkey(false);
+
+
+
+    QString s;
+    const  EVP_CIPHER* xbp;
+    if (!algo_widgetx->isBitCombooxDisabled())
+    {
+        s.append(algo_widgetx->getAlgorithm());
+        s.append("-");
+        s.append(algo_widgetx->getBit());
+        s.append("-");
+        s.append(algo_widgetx->getMode());
+
+        xbp = (const EVP_CIPHER*)EVP_get_cipherbyname(s.toStdString().c_str());
+
+    }
+    else {
+        if (strcmp(algo_widgetx->getAlgorithm().toStdString().c_str(), "Blowfish") == 0)
+            s.append("bf");
+
+        else s.append(algo_widgetx->getAlgorithm());
+        s.append("-");
+        s.append(algo_widgetx->getMode());
+
+        qInfo() << s.toStdString().c_str();
+        xbp = EVP_get_cipherbyname(s.toStdString().c_str());
+    }
+
+
+    int key_len = EVP_CIPHER_get_key_length(xbp);
+    int iv_len = EVP_CIPHER_get_iv_length(xbp);
+
+    if (algo_widgetx->getKey().length() != key_len)
+    {
+        algo_widgetx->highlightkey(true);
+        return 0;
+    }
+    if (algo_widgetx->getIv().length() != iv_len)
+    {
+        algo_widgetx->highlightIV(true);
+
+
+        return 0;
+    }
+
+
     if(!std::filesystem::exists(toopen->text().toStdString()))
     {
         QMessageBox::information(this,"info","File is not found");
 
         return 0;
     }
-        if(key->text().length()==0){
-        key->setStyleSheet("border:1px solid red");
-    }
-    else{
-        key->setStyleSheet("");
-    }
+     
 
-    if(iv->isEnabled() && iv->text().length()==0){
-        iv->setStyleSheet("border:1px solid red");
-    }
-    else{
-        iv->setStyleSheet("");
-    }
-    if(bitcombobox->isEnabled()){
+   
+   
+ 
 
-        int x = bitcombobox->currentText().toInt();
-        if(x==128){
-            if(key->text().length() != 16) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
-        else if(x==192){
-            if(key->text().length() != 24) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
-        else if(x==256){
-            if(key->text().length() != 32) {  key->setStyleSheet("border:1px solid red"); return 0;}
-            else   key->setStyleSheet("");
-        }
-    }
-    if(iv->isEnabled()){
-        if(iv->text().length()!=16){
-            iv->setStyleSheet("border:1px solid red"); return 0;
-        }
-        else
-            iv->setStyleSheet("");
-    }
+    if( f->selectedFiles().length() !=0 ){
 
-    if(key->text().length() !=0 && f->selectedFiles().length() !=0 && iv->isEnabled() && iv->text().length() !=0 ){
-
-        createthread();
+        createthread(xbp);
     }
-    if(key->text().length() !=0 &&  f->selectedFiles().length() !=0  && !iv->isEnabled() ){
-
-        createthread();
-    }
-
+ 
 }
 
 void filewidget::fileready(int x)
@@ -331,31 +187,10 @@ void filewidget::fileready(int x)
     }
 }
 
-void filewidget::createthread()
+void filewidget::createthread(const  EVP_CIPHER* xbp)
 {
     dowork->setDisabled(true);
-    QString AL = algorithm->currentText();
-    QString mode = cmode->currentText();
-    const EVP_CIPHER *xbp;
-    QString s;
-    if(bitcombobox->isEnabled())
-    {
-        s.append(AL);
-        s.append("-");
-        s.append(bitcombobox->currentText());
-        s.append("-");
-        s.append(mode);
-        xbp= EVP_get_cipherbyname(s.toStdString().c_str());
-    }
-    else{
-        if(strcmp(algorithm->currentText().toStdString().c_str(),"Blowfish")==0)
-            s.append("bf");
-
-        else s.append(AL);
-        s.append("-");
-        s.append(mode);
-        xbp= EVP_get_cipherbyname(s.toStdString().c_str());
-    }
+   
     if(xbp != 0){
         QString s;
         if(tosave->text().length()==0){
@@ -363,10 +198,10 @@ void filewidget::createthread()
             s.append(".denc");
         }else s= tosave->text();
         if(file->isChecked()){
-        std::thread tmxx(threadcall,xbp,f->selectedFiles().at(0),s,key->text(),iv->text(),(int)r1->isChecked(),this);
+        std::thread tmxx(threadcall,xbp,f->selectedFiles().at(0),s,algo_widgetx->getKey(), algo_widgetx->getIv(), algo_widgetx->isEncryptedChecked(), this);
         tmxx.detach();}
         else{
-            std::thread tmxx(encryptFolder,xbp,f->selectedFiles().at(0),s,key->text(),iv->text(),(int)r1->isChecked(),this);
+            std::thread tmxx(encryptFolder, xbp, f->selectedFiles().at(0), s, algo_widgetx->getKey(), algo_widgetx->getIv() , algo_widgetx->isEncryptedChecked(), this);
             tmxx.detach();
         }
     }
@@ -416,19 +251,6 @@ void filewidget::threadcall(const EVP_CIPHER *C,QString plain,QString enc,QStrin
 
         t->do_ui(2);
 
-    }
-}
-
-void filewidget::keychanged2(const QString & text)
-{
-    keylen->setText(QString::fromStdString(std::to_string(text.length())));
-}
-
-void filewidget::ivchanged2(const QString & text)
-{
-    if(iv->isEnabled()){
-
-        ivlen->setText(QString::fromStdString(std::to_string(text.length())));
     }
 }
 

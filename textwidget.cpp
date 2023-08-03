@@ -2,7 +2,7 @@
 #include<Algorithms_list.h>
 
 #include"base64.h"
-#include"common.h"
+#include"CryptoUtil.h"
 #include<algo_widget.h>
 #include<openssl/provider.h>
 #include<qmessagebox.h>
