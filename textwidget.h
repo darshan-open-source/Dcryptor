@@ -20,6 +20,12 @@
 #include<thread>
 #include<qtoolbutton.h>
 #include"algo_widget.h"
+#include<Algorithms_list.h>
+
+#include"base64.h"
+#include<algo_widget.h>
+#include<openssl/provider.h>
+#include<qmessagebox.h>
 
 class textwidget : public QWidget
 {

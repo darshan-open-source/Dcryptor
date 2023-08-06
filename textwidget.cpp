@@ -1,11 +1,6 @@
 #include "textwidget.h"
-#include<Algorithms_list.h>
-
-#include"base64.h"
 #include"CryptoUtil.h"
-#include<algo_widget.h>
-#include<openssl/provider.h>
-#include<qmessagebox.h>
+
 textwidget::textwidget(QWidget *parent) : QWidget(parent)
 {
   OSSL_PROVIDER_load(NULL, "legacy");
@@ -16,22 +11,30 @@ textwidget::textwidget(QWidget *parent) : QWidget(parent)
 
     t = new QTextEdit(this);
     t->setPlaceholderText("Enter Text Here");
+    t->setStyleSheet("QTextEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
 
     dowork = new QPushButton("Encrypt",this);
+
+    dowork->setStyleSheet("QPushButton{height:25px;}QPushButton:hover{background-color:#007bff;border-radius:4px;color:white;border-style: inset;}");
+
     pbar = new QProgressBar(this);
     pbar->setFormat("Nothing");
-    pbar->setRange(0,100);
+    pbar->setRange(0,0);
     pbar->setValue(0);
     pbar->setStyleSheet("text-align:center");
 
     out = new QTextBrowser(this);
+    out->setStyleSheet("  background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;");
+
     gb = new QGroupBox("save to file",this);
     last_layout= new QHBoxLayout();
 
     bin = new QRadioButton("binary",gb);
     base64encoded = new QRadioButton("Base64",gb);
 
-    save = new QPushButton("save",this);
+    save = new QPushButton("Save",this);
+    save->setStyleSheet("QPushButton{height:25px;}QPushButton:hover{background-color:#007bff;border-radius:4px;color:white;border-style: inset;}");
+
 
     last_layout->addWidget(bin);
     last_layout->addWidget(base64encoded);

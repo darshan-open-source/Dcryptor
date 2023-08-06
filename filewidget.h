@@ -15,14 +15,11 @@
 #include<QTextBrowser>
 #include<qprogressbar.h>
 #include<QFileDialog>
-#include<QCheckBox>
-#include<openssl/evp.h>
 #include<thread>
-
 #include<qmessagebox.h>
 #include<algo_widget.h>
-#include<sys/stat.h>
-#include<qtoolbutton.h>
+#include<qdiriterator.h>
+#include<filesystem>
 class filewidget : public QWidget
 {
     Q_OBJECT
@@ -60,6 +57,7 @@ public slots:
    
     void update_progress(int,int);
     void progress(int,int);
+    void encryptDecryptButtionChanged(bool val);
     void openclicked();
 
     void saveclicked();

@@ -10,6 +10,7 @@ int Encrypt_Data(const EVP_CIPHER* cipher, char* key, char* iv, char* input, int
     int a = EVP_EncryptInit(ctx, cipher, (const usc)key, iv == NULL ? 0 : (const usc)iv);
 
     int b = EVP_EncryptUpdate(ctx, (usc)output, &temp, (const usc)input, input_length);
+    qInfo() << a << b;
     output_len += temp;
     int x;
     x = (output_len * 100) / input_length;
@@ -19,7 +20,7 @@ int Encrypt_Data(const EVP_CIPHER* cipher, char* key, char* iv, char* input, int
     x = (output_len * 100) / input_length;
     t->progress(x);
     t->progress(100);
-    qInfo() << "df" << ERR_error_string(ERR_get_error(), 0) << output_len;
+    qInfo() << "df" << c << ERR_error_string(ERR_get_error(), 0) << output_len;
 
     return output_len;
 };
@@ -52,14 +53,14 @@ int Encrypt_File(const EVP_CIPHER* cipher, const char* key, const char* iv, cons
         qInfo("resolving");
         return 0;
     }
-    struct stat st;
-    stat(filename, &st);
+    
     char plaintext[1024], encrypted_text[1024];
     size_t readded, enclen = 0;
     int  temp;
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     EVP_EncryptInit(ctx, cipher, (usc)key, iv == NULL ? 0 : (const usc)iv);
 
+    QFileInfo f(filename);
 
     while (BIO_read_ex(text_file, plaintext, 1024, &readded) == 1)
     {
@@ -69,10 +70,9 @@ int Encrypt_File(const EVP_CIPHER* cipher, const char* key, const char* iv, cons
 
 
         enclen += temp;
-        QFileInfo f(filename);
 
         size_t x = (enclen * 100) / f.size();
-        f2->progress(x, 0);
+        f2->progress(x, 1);
 
 
         BIO_write(encrypted_file, encrypted_text, temp);
@@ -83,12 +83,14 @@ int Encrypt_File(const EVP_CIPHER* cipher, const char* key, const char* iv, cons
     int olen;
 
     EVP_EncryptFinal(ctx, (usc)output, &olen);
-    f2->progress(100, 0);
+    f2->progress(100, 1);
 
     BIO_write(encrypted_file, output, olen);
     BIO_flush(encrypted_file);
     BIO_free(text_file);
     BIO_free(encrypted_file);
+    EVP_CIPHER_CTX_free(ctx);
+
     return 1;
 };
 
@@ -96,20 +98,21 @@ int Decrypt_File(const EVP_CIPHER* cipher, const  char* key, const char* iv, con
 {
     BIO* encryptedinput_file = BIO_new_file(filename, "rb");
     BIO* decrypted_file = BIO_new_file(output_file, "wb"); \
-        qInfo() << filename << "  " << output_file;
+       
     if (encryptedinput_file == 0 || decrypted_file == 0)
         return 0;
-    qInfo() << "dddd";
+    
     char plaintext[1024], encrypted_text[1024];
     size_t readded, enclen = 0;
     int temp;
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    QFileInfo f(filename);
+
     EVP_DecryptInit(ctx, cipher, (usc)key, iv == NULL ? 0 : (const usc)iv);
     while (BIO_read_ex(encryptedinput_file, plaintext, 1024, &readded) == 1)
     {
         EVP_DecryptUpdate(ctx, (usc)encrypted_text, &temp, (usc)plaintext, readded);
         enclen += temp;
-        QFileInfo f(filename);
 
         size_t x = (enclen * 100) / f.size();
         f2->progress(x, 0);;
@@ -124,7 +127,10 @@ int Decrypt_File(const EVP_CIPHER* cipher, const  char* key, const char* iv, con
     BIO_write(decrypted_file, output, olen);
     BIO_flush(decrypted_file);
     BIO_free(encryptedinput_file);
+
     BIO_free(decrypted_file);
+    EVP_CIPHER_CTX_free(ctx);
+
     return 1;
 };
 

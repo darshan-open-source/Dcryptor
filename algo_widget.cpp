@@ -18,8 +18,8 @@ algo_widget::algo_widget(QWidget* parent):QWidget(parent)
     label = new  QLabel("Select Algorithm   ", this);
     label2 = new QLabel("Select Cipher Mode", this);
     label3 = new QLabel("Select Bit          ", this);
-    label4 = new QLabel("Key                   ", this);
-    label5 = new QLabel("Eigen Vector Iv ", this);
+    label4 = new QLabel("Key           ", this);
+    label5 = new QLabel("Init vector", this);
    
     algorithm = new QComboBox(this);
     addAllAlgorithms();
@@ -31,9 +31,15 @@ algo_widget::algo_widget(QWidget* parent):QWidget(parent)
     key = new QLineEdit(this);
     iv = new QLineEdit(this);
 
+    key->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
+    iv->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
+
+  //  algorithm->setStyleSheet("  QComboBox{ background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
+
     keylen = new QLabel("0", this);
     ivlen = new QLabel("0", this);
 
+    
 
     key->setPlaceholderText("Enter key here");
     iv->setPlaceholderText("Enter Eigon vector here");

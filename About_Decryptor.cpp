@@ -35,8 +35,8 @@ About_Decryptor::About_Decryptor(QWidget* parent) : QWidget(parent)
     descriptionBrowser->setHtml(
         "<p style='font-size: 16px; text-align: center;'>"
         "Dcryptor is a free and open-source encryption tool written in C++ using Qt and OpenSSL. It offers a wide range of algorithms and cipher modes to encrypt and decrypt strings and files. It is cross-platform compatible and provides a user-friendly GUI for secure data protection. <br><br>"
-        "For more information, visit our <a href='https://www.example.com'>website</a>."
-
+        "For more information, visit our <a href='https://github.com/darshan-open-source/Dcryptor'>website</a>."
+        "<br><br> Author : Darshan Sojitra"
         "</p>"
     );
     descriptionBrowser->setStyleSheet("background:transparent;border:none");
