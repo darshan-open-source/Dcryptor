@@ -141,7 +141,7 @@ int textwidget::do_pressed()
         s.append("-");
         s.append(algo_widgetx->getMode());
     
-        qInfo() << s.toStdString().c_str();
+        
         xbp = EVP_get_cipherbyname(s.toStdString().c_str());
     }
 
@@ -171,6 +171,7 @@ int textwidget::do_pressed()
 
     
     if(t->toPlainText().length() !=0 ){
+        pbar->setRange(0, 100);
 
         createthread(xbp);
     }
@@ -180,6 +181,8 @@ int textwidget::do_pressed()
 
 void textwidget::text_is_ready(std::string s)
 {
+    pbar->setRange(0,0);
+
     QString sx(s.c_str());
 
 if(sx.length()!=0){

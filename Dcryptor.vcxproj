@@ -201,10 +201,12 @@
     <ClCompile Include="filewidget.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="MyLineEdit.cpp" />
     <ClCompile Include="textwidget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CryptoUtil.h" />
+    <ClInclude Include="MyLineEdit.h" />
     <QtMoc Include="About_Decryptor.h" />
     <ClInclude Include="Algorithms_list.h" />
     <QtMoc Include="algo_widget.h" />

@@ -116,6 +116,7 @@ void filewidget::connector()
 }
 int filewidget::do_pressed()
 {
+
 	algo_widgetx->highlightIV(false);
 	algo_widgetx->highlightkey(false);
 
@@ -142,7 +143,6 @@ int filewidget::do_pressed()
 		s.append("-");
 		s.append(algo_widgetx->getMode());
 
-		qInfo() << s.toStdString().c_str();
 		xbp = EVP_get_cipherbyname(s.toStdString().c_str());
 	}
 
@@ -166,7 +166,7 @@ int filewidget::do_pressed()
 
 	if (!std::filesystem::exists(toopen->text().toStdString()))
 	{
-		QMessageBox::information(this, "info", "File is not found");
+		QMessageBox::critical(this, "info", "Please Select Input File");
 
 		return 0;
 	}
@@ -174,7 +174,7 @@ int filewidget::do_pressed()
 	if (tosave->text().length() == 0)
 	{
 
-		QMessageBox::critical(this, "info", "Please Select output destination ");
+		QMessageBox::critical(this, "info", "Please Select Output Destination ");
 
 		return 0;
 	}
@@ -188,6 +188,7 @@ int filewidget::do_pressed()
 
 
 	if (f->selectedFiles().length() != 0) {
+		pbar->setRange(0, 100);
 
 		createthread(xbp);
 	}
@@ -196,6 +197,8 @@ int filewidget::do_pressed()
 
 void filewidget::fileready(int x)
 {
+	pbar->setRange(0, 0);
+
 	if (x == 1 && !folder->isChecked()) {
 		dowork->setEnabled(1);
 		QMessageBox::information(this, "info", "File Encrypted Successfully");
@@ -314,6 +317,7 @@ void filewidget::threadcall(const EVP_CIPHER* C, QString plain, QString enc, QSt
 		qInfo("decrypting file");
 		Decrypt_File(C, key.toStdString().c_str(), iv.toStdString().c_str(), plain.toStdString().c_str(), enc.toStdString().c_str(), t);
 
+		t->do_ui(2);
 		t->do_ui(2);
 
 	}

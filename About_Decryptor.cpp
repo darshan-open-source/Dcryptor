@@ -25,7 +25,7 @@ About_Decryptor::About_Decryptor(QWidget* parent) : QWidget(parent)
     titleLabel->setStyleSheet("font-size: 24px; font-weight: bold;");
     mainLayout->addWidget(titleLabel);
 
-    QLabel* versionLabel = new QLabel("Version 1.0", this);
+    QLabel* versionLabel = new QLabel("Version 1.2 LTS", this);
     versionLabel->setAlignment(Qt::AlignCenter);
     mainLayout->addWidget(versionLabel);
 
@@ -34,7 +34,7 @@ About_Decryptor::About_Decryptor(QWidget* parent) : QWidget(parent)
     descriptionBrowser->setOpenExternalLinks(true);
     descriptionBrowser->setHtml(
         "<p style='font-size: 16px; text-align: center;'>"
-        "Dcryptor is a free and open-source encryption tool written in C++ using Qt and OpenSSL. It offers a wide range of algorithms and cipher modes to encrypt and decrypt strings and files. It is cross-platform compatible and provides a user-friendly GUI for secure data protection. <br><br>"
+        "Dcryptor is a free and open-source encryption tool written in C++ using Qt and OpenSSL. It offers a wide range of algorithms and cipher modes to encrypt and decrypt strings,files and folders. It is cross-platform compatible and provides a user-friendly GUI for secure data protection. <br><br>"
         "For more information, visit our <a href='https://github.com/darshan-open-source/Dcryptor'>website</a>."
         "<br><br> Author : Darshan Sojitra"
         "</p>"

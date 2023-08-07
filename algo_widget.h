@@ -10,6 +10,7 @@
 #include<QRadioButton>
 #include<QGroupBox>
 #include<qlineedit.h>
+#include"MyLineEdit.h"
 #include<qlabel.h>
 #include<QTextEdit>
 #include<QTextBrowser>
@@ -54,6 +55,8 @@ public:
     void addBitsAndModes(QString s);
     void attachConnect();
 
+    void generateRandomKey();
+    void generateRandomIV();
 
 public slots:
     void algochanged(int i);
@@ -61,7 +64,6 @@ public slots:
     void keychanged2(const QString&);
     void ivchanged2(const QString&);
     void encryptDecryptButtionChanged();
-  
 signals:
     void encryptDecryptRadioButtonChanged(bool);
 };

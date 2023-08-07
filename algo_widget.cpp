@@ -22,14 +22,18 @@ algo_widget::algo_widget(QWidget* parent):QWidget(parent)
     label5 = new QLabel("Init vector", this);
    
     algorithm = new QComboBox(this);
+    algorithm->setObjectName("algo");
     addAllAlgorithms();
 
     cmode = new QComboBox(this);
     bitcombobox = new QComboBox(this);
+    bitcombobox->setObjectName("bit");
+
+    cmode->setObjectName("cmode");
 
 
-    key = new QLineEdit(this);
-    iv = new QLineEdit(this);
+    key = new MyLineEdit(true,this);
+    iv = new MyLineEdit(false,this);
 
     key->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
     iv->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
@@ -130,10 +134,13 @@ void algo_widget::highlightIV(bool val)
 {
     if (val)
     {
-        iv->setStyleSheet("border:1px solid red");
+        iv->setStyleSheet("QLineEdit { background-color: white; border: 1px solid red; padding: 5px; border-radius: 5px;}");
+
+        
 
     }
-    else iv->setStyleSheet("");
+    else iv->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
+
 
 
 }
@@ -142,10 +149,12 @@ void algo_widget::highlightkey(bool val)
 {
     if (val)
     {
-        key->setStyleSheet("border:1px solid red");
+        key->setStyleSheet("QLineEdit { background-color: white; border: 1px solid red; padding: 5px; border-radius: 5px;}");
+
 
     }
-    else key->setStyleSheet("");
+    else     key->setStyleSheet("QLineEdit { background-color: white; border: 1px solid #a8a8a8; padding: 5px; border-radius: 5px;}");
+
 }
 
 
@@ -187,9 +196,16 @@ void algo_widget::attachConnect()
     connect(key, SIGNAL(textChanged(const QString&)), this, SLOT(keychanged2(const QString&)));
     connect(r1, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
     connect(r2, SIGNAL(clicked()), this, SLOT(encryptDecryptButtionChanged()));
-
     // for inialize bit and modes in ui
     algorithm->currentIndexChanged(algorithm->currentIndex());
+}
+
+void algo_widget::generateRandomKey()
+{
+}
+
+void algo_widget::generateRandomIV()
+{
 }
 
 
@@ -213,6 +229,8 @@ void algo_widget::encryptDecryptButtionChanged()
         emit encryptDecryptRadioButtonChanged(true);
     else emit encryptDecryptRadioButtonChanged(false);
 }
+
+
 
 void algo_widget::algochanged(int i)
 {
