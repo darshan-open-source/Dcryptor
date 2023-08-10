@@ -7,7 +7,7 @@ Dcryptor is a free and open-source encryption tool written in C++ using Qt and O
 
 ## Screenshots
 
-![App Screenshot](https://github.com/darshan-open-source/Dcryptor/blob/main/screenshots/screenshot.png)
+![App Screenshot](https://github.com/darshan-open-source/Dcryptor/blob/main/screenshots/ScreenShot.png)
 
 
 ## Features
