@@ -38,3 +38,6 @@ Dcryptor is a free and open-source encryption tool written in C++ using Qt and O
 ## Support
 
 For support, email darshanopensource@gmail.com
+
+## See also
+[List of cryptography GUI tools](https://gist.github.com/stokito/eea7ee50d51e1db30122e2e33a62723e)
